@@ -1,0 +1,45 @@
+﻿@model CarRentalSystem.Models.Car
+
+@{
+    ViewData["Title"] = "Car Details";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="row g-0">
+            <!-- Car Image -->
+            <div class="col-md-5">
+                <img src="@Model.CarImage" class="img-fluid rounded-start" alt="@Model.CarName" style="height: 100%; object-fit: cover;">
+            </div>
+
+            <!-- Car Details -->
+            <div class="col-md-7">
+                <div class="card-body">
+                    <h2 class="card-title display-5">@Model.CarName</h2>
+                    <p class="card-text fs-4">
+                        <strong>Model:</strong> @Model.CarModel <br />
+                        <strong>Price/Day:</strong> $@Model.RentPricePerDay <br />
+                        <strong>Description:</strong> @Model.CarDescription
+                    </p>
+                    <p class="card-text fs-5">
+                        <strong>Availability:</strong>
+                        @if (Model.IsAvailable)
+                        {
+                            <span class="badge bg-success fs-6">Available</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger fs-6">Not Available</span>
+                        }
+                    </p>
+                    @if (Model.IsAvailable)
+                    {
+                        <div class="mt-4">
+                            <a href="/rent/car/@Model.CarId" class="btn btn-primary btn-lg">Rent Now</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -4,7 +4,9 @@
     <div class="card h-100 shadow-sm">
         <img src="@Model.CarImage" class="card-img-top" alt="@Model.CarName" style="height: 200px; object-fit: cover;">
         <div class="card-body">
-            <h5 class="card-title">@Model.CarName</h5>
+            <a asp-controller="Car" asp-action="Details" asp-route-id="@Model.CarId" >
+                <h5 class="card-title">@Model.CarName</h5>
+            </a>
             <p class="card-text">
                 <strong>Model:</strong> @Model.CarModel <br />
                 <strong>Price/Day:</strong> $@Model.RentPricePerDay <br />

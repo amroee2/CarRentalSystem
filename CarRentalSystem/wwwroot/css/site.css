@@ -20,3 +20,15 @@ html {
 body {
   margin-bottom: 60px;
 }
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card img {
+    border-radius: 15px 0 0 15px;
+}
+
+.card-body {
+    padding: 30px;
+}
