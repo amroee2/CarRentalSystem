@@ -9,5 +9,6 @@
         public Car Car { get; set; }
         public DateTime RentalStartDate { get; set; }
         public DateTime RentalEndDate { get; set; }
+        public double TotalCost { get; set; }
     }
 }
