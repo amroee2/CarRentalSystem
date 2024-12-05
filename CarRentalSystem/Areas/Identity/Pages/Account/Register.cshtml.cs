@@ -71,34 +71,55 @@ namespace CarRentalSystem.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
+            [Required]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
+            [Display(Name = "Confirm Password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [Phone]
+            [Display(Name = "Phone Number")]
+            public string PhoneNumber { get; set; }
+
+            [Required]
+            [Display(Name = "Primary Address")]
+            public string PrimaryAddress { get; set; }
+
+            [Display(Name = "Secondary Address")]
+            public string SecondaryAddress { get; set; }
+
+            [Required]
+            [Display(Name = "City")]
+            public string City { get; set; }
+
+            [Required]
+            [Display(Name = "Country")]
+            public string Country { get; set; }
+
+            [Required]
+            [Display(Name = "Driver's License Number")]
+            public string DriversLicenseNumber { get; set; }
         }
+
 
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -111,9 +132,19 @@ namespace CarRentalSystem.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
+                user.PhoneNumber = Input.PhoneNumber;
+                user.PrimaryAddress = Input.PrimaryAddress;
+                user.SecondaryAddress = Input.SecondaryAddress;
+                user.City = Input.City;
+                user.Country = Input.Country;
+                user.DriversLicenseNumber = Input.DriversLicenseNumber;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -151,9 +182,9 @@ namespace CarRentalSystem.Areas.Identity.Pages.Account
                 }
             }
 
-            // If we got this far, something failed, redisplay form
             return Page();
         }
+
 
         private User CreateUser()
         {
