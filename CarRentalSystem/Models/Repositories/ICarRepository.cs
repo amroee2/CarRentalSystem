@@ -4,5 +4,7 @@
     {
 
         Task<List<Car>> GetAllCars();
+
+        Task<Car> GetCar(int id);
     }
 }

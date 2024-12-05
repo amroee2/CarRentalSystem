@@ -14,7 +14,12 @@ namespace CarRentalSystem.Models.Repositories
 
         public async Task <List<Car>> GetAllCars()
         {
-            return await _context.Cars.ToListAsync();
+            return await _context.Cars.AsNoTracking().ToListAsync();
+        }
+
+        public async Task<Car> GetCar(int id)
+        {
+            return await _context.Cars.AsNoTracking().FirstOrDefaultAsync(c => c.CarId == id);
         }
     }
 }
