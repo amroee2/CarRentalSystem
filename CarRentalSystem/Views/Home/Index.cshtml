@@ -1,8 +1,44 @@
-﻿@{
+﻿@model CarListViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+    <h1 class="text-center">Our Cars</h1>
+    <div class="row">
+        @foreach (var car in Model.Cars)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="@car.CarImage" class="card-img-top" alt="@car.CarName" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">@car.CarName</h5>
+                        <p class="card-text">
+                            <strong>Model:</strong> @car.CarModel <br />
+                            <strong>Price/Day:</strong> $@car.RentPricePerDay <br />
+                            <strong>Description:</strong> @car.CarDescription
+                        </p>
+                        <p>
+                            <strong>Availability:</strong>
+                            @if (car.IsAvailable)
+                            {
+                                <span class="badge bg-success">Available</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Not Available</span>
+                            }
+                        </p>
+                        @if (car.IsAvailable)
+                        {
+                            <div class="text-center">
+                                <a href="/rent/car/@car.CarId" class="btn btn-primary btn-sm">Rent Now</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
