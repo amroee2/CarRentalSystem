@@ -1,0 +1,32 @@
+﻿@model CarRentalSystem.Models.Car
+
+<div class="col-md-4 mb-4">
+    <div class="card h-100 shadow-sm">
+        <img src="@Model.CarImage" class="card-img-top" alt="@Model.CarName" style="height: 200px; object-fit: cover;">
+        <div class="card-body">
+            <h5 class="card-title">@Model.CarName</h5>
+            <p class="card-text">
+                <strong>Model:</strong> @Model.CarModel <br />
+                <strong>Price/Day:</strong> $@Model.RentPricePerDay <br />
+                <strong>Description:</strong> @Model.CarDescription
+            </p>
+            <p>
+                <strong>Availability:</strong>
+                @if (Model.IsAvailable)
+                {
+                    <span class="badge bg-success">Available</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Not Available</span>
+                }
+            </p>
+            @if (Model.IsAvailable)
+            {
+                <div class="text-center">
+                    <a href="/rent/car/@Model.CarId" class="btn btn-primary btn-sm">Rent Now</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
