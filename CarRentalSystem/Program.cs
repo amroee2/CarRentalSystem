@@ -12,7 +12,8 @@ builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfi
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ICarRepository, CarRepository>();
-
+builder.Services.AddScoped<CarRentalSystemDbContext, CarRentalSystemDbContext>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
