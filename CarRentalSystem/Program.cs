@@ -14,6 +14,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<CarRentalSystemDbContext, CarRentalSystemDbContext>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<IRentalRepository, RentalRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
