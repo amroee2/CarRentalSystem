@@ -16,17 +16,6 @@ namespace CarRentalSystem.Models
         [Required(ErrorMessage = "Please enter a valid Email")]
         [Display(Name = "Email Address")]
         [EmailAddress]
-        public string Email { get; set; }
-        [Required(ErrorMessage = "Please enter a valid Password")]
-        [Display(Name = "Password")]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-        [Required(ErrorMessage = "Please enter your Phone Number")]
-        [Display(Name = "Phone Number")]
-        [DataType(DataType.PhoneNumber)]
-        public string PhoneNumber { get; set; }
-        [Required(ErrorMessage = "Please enter your Address")]
-        [Display(Name = "Primary Address")]
         public string PrimaryAddress { get; set; }
         [Display(Name = "Secondary Address")]
         public string SecondaryAddress { get; set; }
