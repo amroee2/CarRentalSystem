@@ -53,5 +53,12 @@ namespace CarRentalSystem.Controllers
             _cartRepository.RemoveFromCart(userId, carId);
             return RedirectToAction("Checkout");
         }
+
+        public IActionResult Summary()
+        {
+            var userId = _userManager.GetUserId(User);
+            var carts = _cartRepository.GetAllCarts(userId);
+            return View(carts);
+        }
     }
 }

@@ -93,7 +93,7 @@ public class CartRepository : ICartRepository
             var car = _context.Cars.Find(item.CarId);
             if (car != null) car.IsAvailable = false;
         }
-
+        cart.CheckedOutDate = DateTime.Now;
         cart.IsCheckedOut = true;
         _context.SaveChanges();
     }
@@ -115,5 +115,14 @@ public class CartRepository : ICartRepository
         cart.TotalCost -= cartItem.Cost;
         cart.CartItems.Remove(cartItem);
         _context.SaveChanges();
+    }
+
+    public List<Cart> GetAllCarts(string userId)
+    {
+        return _context.Carts
+            .Include(c => c.CartItems)
+            .ThenInclude(ci => ci.Car)
+            .Where(c => c.UserId == userId)
+            .ToList();
     }
 }

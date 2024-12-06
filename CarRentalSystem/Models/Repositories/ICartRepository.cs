@@ -7,5 +7,6 @@
         void Checkout(string userId);
         void EmptyCart(string userId);
         void RemoveFromCart(string userId, int carId);
+        List<Cart> GetAllCarts(string userId);
     }
 }
