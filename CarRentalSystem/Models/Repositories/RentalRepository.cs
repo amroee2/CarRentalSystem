@@ -10,10 +10,18 @@ namespace CarRentalSystem.Models.Repositories
             _context = context;
         }
 
-        public List<Rental> GetAll(string userId)
+        public List<Rental> GetUserRentals(string userId)
         {
             return _context.Rentals
                 .Where(r => r.UserId == userId)
+                .Include(r => r.Car)
+                .ToList();
+        }
+
+        public List<Rental> GetActiveUserRentals(string userId)
+        {
+            return _context.Rentals
+                .Where(r => r.UserId == userId && r.RentalEndDate > DateTime.Now)
                 .Include(r => r.Car)
                 .ToList();
         }

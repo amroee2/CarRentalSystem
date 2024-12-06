@@ -2,6 +2,7 @@
 {
     public interface IRentalRepository
     {
-        List<Rental> GetAll(string userId);
+        List<Rental> GetUserRentals(string userId);
+        List<Rental> GetActiveUserRentals(string userId);
     }
 }

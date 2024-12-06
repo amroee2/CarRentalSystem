@@ -19,7 +19,7 @@ namespace CarRentalSystem.Controllers
         public IActionResult UserRentals()
         {
             var userId = _userManager.GetUserId(User);
-            var rentals = _rentalRepository.GetAll(userId);
+            var rentals = _rentalRepository.GetUserRentals(userId);
             return View(rentals);
         }
     }
