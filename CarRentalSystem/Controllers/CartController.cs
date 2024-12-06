@@ -33,9 +33,17 @@ namespace CarRentalSystem.Controllers
         [HttpPost]
         public IActionResult AddToCart(int carId,DateTime start, DateTime end)
         {
-            var userId = _userManager.GetUserId(User);
-            _cartRepository.AddToCart(userId, carId, start, end);
-            return RedirectToAction("Checkout");
+            try
+            {
+                var userId = _userManager.GetUserId(User);
+                _cartRepository.AddToCart(userId, carId, start, end);
+                return RedirectToAction("Checkout");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpPost]
@@ -57,7 +65,7 @@ namespace CarRentalSystem.Controllers
         public IActionResult Summary()
         {
             var userId = _userManager.GetUserId(User);
-            var carts = _cartRepository.GetAllCarts(userId);
+            var carts = _cartRepository.GetAllProcessedCarts(userId);
             return View(carts);
         }
     }

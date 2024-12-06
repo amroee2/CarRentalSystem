@@ -5,10 +5,11 @@ using Microsoft.EntityFrameworkCore;
 public class CartRepository : ICartRepository
 {
     private readonly CarRentalSystemDbContext _context;
-
-    public CartRepository(CarRentalSystemDbContext context)
+    private readonly IRentalRepository _rentalRepository;
+    public CartRepository(CarRentalSystemDbContext context, IRentalRepository rentalRepository)
     {
         _context = context;
+        _rentalRepository = rentalRepository;
     }
 
     public Cart GetOrCreateCart(string userId)
@@ -38,22 +39,21 @@ public class CartRepository : ICartRepository
         var cart = GetOrCreateCart(userId);
         if (cart.CartItems.Any(ci => ci.CarId == carId))
         {
-            var existingCartItem = _context.CartItems.FirstOrDefault(ci => ci.CarId == carId);
-            cart.TotalCost -= existingCartItem.Cost;
-            existingCartItem.RentalStart = rentalStart;
-            existingCartItem.RentalEnd = rentalEnd;
-            existingCartItem.Cost = (rentalEnd - rentalStart).Days * existingCartItem.Car.RentPricePerDay;
-            cart.TotalCost += existingCartItem.Cost;
-            _context.SaveChanges();
+            ModifyExistingCarDate(cart, carId, rentalStart, rentalEnd);
             return;
         }
         var car = _context.Cars.Find(carId);
 
-        if (car == null || !car.IsAvailable)
-            throw new InvalidOperationException("Car not available.");
+        try
+        {
+            ValidateAddition(cart, car, rentalEnd, rentalStart, userId);
+        }
+        catch (InvalidOperationException ex)
+        {
+            throw new InvalidOperationException(ex.Message);
+        }
 
         var rentalDays = (rentalEnd - rentalStart).Days;
-        if (rentalDays <= 0) throw new ArgumentException("Invalid rental duration.");
 
         var rentalCost = rentalDays * car.RentPricePerDay;
 
@@ -117,12 +117,58 @@ public class CartRepository : ICartRepository
         _context.SaveChanges();
     }
 
-    public List<Cart> GetAllCarts(string userId)
+    public List<Cart> GetAllProcessedCarts(string userId)
     {
         return _context.Carts
+            .Where(c => c.IsCheckedOut)
             .Include(c => c.CartItems)
             .ThenInclude(ci => ci.Car)
             .Where(c => c.UserId == userId)
             .ToList();
+    }
+
+    public void ModifyExistingCarDate(Cart cart, int carId, DateTime rentalStart, DateTime rentalEnd)
+    {
+        var existingCartItem = _context.CartItems.FirstOrDefault(ci => ci.CarId == carId);
+        cart.TotalCost -= existingCartItem.Cost;
+        existingCartItem.RentalStart = rentalStart;
+        existingCartItem.RentalEnd = rentalEnd;
+        existingCartItem.Cost = (rentalEnd - rentalStart).Days * existingCartItem.Car.RentPricePerDay;
+        cart.TotalCost += existingCartItem.Cost;
+        _context.SaveChanges();
+    }
+
+    public void ValidateAddition(Cart cart, Car car, DateTime rentalEnd, DateTime rentalStart, string userId)
+    {
+        if (car == null || !car.IsAvailable)
+            throw new InvalidOperationException("Car not available.");
+
+        var rentalDays = (rentalEnd - rentalStart).Days;
+        if (rentalDays <= 0 || rentalStart < DateTime.Now)
+        {
+            throw new InvalidOperationException("Invalid rental period.");
+        }
+
+        foreach (var item in cart.CartItems)
+        {
+            if ((rentalStart >= item.RentalStart && rentalStart <= item.RentalEnd) ||
+                (rentalEnd >= item.RentalStart && rentalEnd <= item.RentalEnd) ||
+                (rentalStart <= item.RentalStart && rentalEnd >= item.RentalEnd))
+            {
+                throw new InvalidOperationException("Car already rented for this period.");
+            }
+        }
+
+        var rentedCars = _rentalRepository.GetActiveUserRentals(userId);
+
+        foreach (var rental in rentedCars)
+        {
+            if ((rentalStart >= rental.RentalStartDate && rentalStart <= rental.RentalEndDate) ||
+                (rentalEnd >= rental.RentalStartDate && rentalEnd <= rental.RentalEndDate) ||
+                (rentalStart <= rental.RentalStartDate && rentalEnd >= rental.RentalEndDate))
+            {
+                throw new InvalidOperationException("A Car already rented for this period.");
+            }
+        }
     }
 }
