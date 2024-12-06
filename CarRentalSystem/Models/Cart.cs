@@ -8,6 +8,7 @@
         public List<CartItem> CartItems { get; set; }
         public double TotalCost { get; set; }
         public bool IsCheckedOut { get; set; }
+        public DateTime CheckedOutDate { get; set; }
         public Cart()
         {
             CartItems = new List<CartItem>();
