@@ -1,0 +1,43 @@
+﻿@model IEnumerable<CarRentalSystem.Models.Rental>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Your Rentals</h2>
+
+    @if (Model.Any())
+    {
+        foreach (var rental in Model)
+        {
+            <div class="rental-summary mb-4 p-3 border rounded">
+                <div class="row align-items-center">
+                    <!-- Car Image -->
+                    <div class="col-md-3">
+                        <img src="@rental.Car.CarImage" alt="@rental.Car.CarName" class="img-fluid rounded" />
+                    </div>
+
+                    <!-- Rental Details -->
+                    <div class="col-md-9">
+                        <h4>@rental.Car.CarName</h4>
+                        <p><strong>Rental Period:</strong> @rental.RentalStartDate.ToString("yyyy-MM-dd") - @rental.RentalEndDate.ToString("yyyy-MM-dd")</p>
+                        <p><strong>Cost:</strong> $@rental.TotalCost</p>
+                        <p>
+                            <strong>Status:</strong>
+                            @if (rental.RentalEndDate < DateTime.Now)
+                            {
+                                <span class="text-danger">Expired</span>
+                            }
+                            else
+                            {
+                                <span class="text-success">Active</span>
+                            }
+                        </p>
+                    </div>
+                </div>
+                <hr class="my-3" />
+            </div>
+        }
+    }
+    else
+    {
+        <p>You have no active or past rentals.</p>
+    }
+</div>
