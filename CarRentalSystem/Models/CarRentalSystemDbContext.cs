@@ -9,10 +9,11 @@ namespace CarRentalSystem.Models
         {
         }
 
-        public DbSet<User> Users { get; set; }
         public DbSet<Car> Cars { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Rental> Rentals { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,6 +25,10 @@ namespace CarRentalSystem.Models
             modelBuilder.Entity<Admin>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
+            modelBuilder.Entity<Cart>()
+                .HasMany(c => c.CartItems)
+                .WithOne(ci => ci.Cart)
+                .HasForeignKey(ci => ci.CartId);
         }
     }
 }

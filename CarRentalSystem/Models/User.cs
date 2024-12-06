@@ -39,12 +39,12 @@ namespace CarRentalSystem.Models
         [Required(ErrorMessage = "Please enter your Driver License Number")]
         [Display(Name = "Drivers License Number")]
         public string DriversLicenseNumber { get; set; }
-
         public List<Rental> Rentals { get; set; }
-
+        public List<Cart> Carts { get; set; }
         public User()
         {
             Rentals = new List<Rental>();
+            Carts = new List<Cart>();
         }
     }
 }
