@@ -22,6 +22,27 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddRazorPages();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(1); 
+    options.Cookie.HttpOnly = true; 
+    options.Cookie.IsEssential = true; 
+});
+
+builder.Services.AddMvc()
+    .AddSessionStateTempDataProvider();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.HttpOnly = true; 
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(1);
+    options.LoginPath = "/Identity/Account/Login";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+    options.SlidingExpiration = false;
+});
+
 async Task SeedAdminRoleAsync(IServiceProvider serviceProvider)
 {
     var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -89,6 +110,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseCookiePolicy();
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
