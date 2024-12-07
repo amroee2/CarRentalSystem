@@ -18,7 +18,7 @@ namespace CarRentalSystem.Models
         [EmailAddress]
         public string PrimaryAddress { get; set; }
         [Display(Name = "Secondary Address")]
-        public string SecondaryAddress { get; set; }
+        public string? SecondaryAddress { get; set; }
         [Required(ErrorMessage = "Please enter your City")]
         [Display(Name = "City")]
         public string City { get; set; }
