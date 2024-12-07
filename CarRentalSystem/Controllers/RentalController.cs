@@ -1,10 +1,12 @@
 ﻿using CarRentalSystem.Models;
 using CarRentalSystem.Models.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRentalSystem.Controllers
 {
+    [Authorize]
     public class RentalController : Controller
     {
         private readonly IRentalRepository _rentalRepository;

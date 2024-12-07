@@ -1,8 +1,10 @@
 ﻿using CarRentalSystem.Models.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRentalSystem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController: Controller
     {
 

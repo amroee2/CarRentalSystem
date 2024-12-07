@@ -1,11 +1,13 @@
 using CarRentalSystem.Models;
 using CarRentalSystem.Models.Repositories;
 using CarRentalSystem.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace CarRentalSystem.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ICarRepository _carRepository;
