@@ -23,19 +23,18 @@ namespace CarRentalSystem.Controllers
             return View(cart);
         }
 
-        public IActionResult EmptyCart()
+        [HttpPost]
+        public IActionResult EmptyCart(string userId)
         {
-            var userId = _userManager.GetUserId(User);
             _cartRepository.EmptyCart(userId);
             return RedirectToAction("Checkout");
         }
 
         [HttpPost]
-        public IActionResult AddToCart(int carId,DateTime start, DateTime end)
+        public IActionResult AddToCart(string userId, int carId,DateTime start, DateTime end)
         {
             try
             {
-                var userId = _userManager.GetUserId(User);
                 _cartRepository.AddToCart(userId, carId, start, end);
                 return RedirectToAction("Checkout");
             }
@@ -47,17 +46,15 @@ namespace CarRentalSystem.Controllers
         }
 
         [HttpPost]
-        public IActionResult CheckoutCart()
+        public IActionResult CheckoutCart(string userId)
         {
-            var userId = _userManager.GetUserId(User);
             _cartRepository.Checkout(userId);
             return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
-        public IActionResult RemoveFromCart(int carId)
+        public IActionResult RemoveFromCart(string userId, int carId)
         {
-            var userId = _userManager.GetUserId(User);
             _cartRepository.RemoveFromCart(userId, carId);
             return RedirectToAction("Checkout");
         }

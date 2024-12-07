@@ -144,7 +144,7 @@ public class CartRepository : ICartRepository
             throw new InvalidOperationException("Car not available.");
 
         var rentalDays = (rentalEnd - rentalStart).Days;
-        if (rentalDays <= 0 || rentalStart < DateTime.Now)
+        if (rentalDays <= 0 || rentalStart < DateTime.Now || rentalStart> rentalEnd)
         {
             throw new InvalidOperationException("Invalid rental period.");
         }

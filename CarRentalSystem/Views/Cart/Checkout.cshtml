@@ -1,5 +1,6 @@
-﻿@model CarRentalSystem.Models.Cart
-
+﻿@using Microsoft.AspNetCore.Identity
+@model CarRentalSystem.Models.Cart
+@inject UserManager<User> UserManager
 @{
     ViewData["Title"] = "Checkout";
 }
@@ -41,6 +42,7 @@ else
                     </td>
                     <td>
                         <form asp-controller="Cart" asp-action="RemoveFromCart" method="post" style="display:inline;">
+                            <input type="hidden" name="userId" value="@UserManager.GetUserId(User)" />
                             <input type="hidden" name="carId" value="@item.Car.CarId" />
                             <button type="submit" class="btn btn-danger btn-sm">Remove</button>
                         </form>
@@ -57,10 +59,12 @@ else
     </table>
 
     <form asp-controller="Cart" asp-action="EmptyCart" method="post" style="display:inline;">
+        <input type="hidden" name="userId" value="@UserManager.GetUserId(User)" />
         <button type="submit" class="btn btn-warning btn-sm">Empty Cart</button>
     </form>
 
     <form asp-controller="Cart" asp-action="CheckoutCart" method="post">
+        <input type="hidden" name="userId" value="@UserManager.GetUserId(User)" />
         <button type="submit" class="btn btn-primary">Confirm</button>
     </form>
 }
