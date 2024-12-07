@@ -21,5 +21,24 @@ namespace CarRentalSystem.Models.Repositories
         {
             return await _context.Cars.AsNoTracking().FirstOrDefaultAsync(c => c.CarId == id);
         }
+
+        public async Task AddCar(Car car)
+        {
+            _context.Cars.Add(car);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateCar(Car car)
+        {
+            _context.Update(car);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteCar(int id)
+        {
+            var car = await _context.Cars.FirstOrDefaultAsync(c => c.CarId == id);
+            _context.Cars.Remove(car);
+            await _context.SaveChangesAsync();
+        }
     }
 }
