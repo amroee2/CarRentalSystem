@@ -1,9 +1,22 @@
 ﻿@page
+@using CountryData.Standard
+@using Microsoft.AspNetCore.Mvc.Rendering
 @model RegisterModel
+
 @{
     ViewData["Title"] = "Register";
-}
 
+    var helper = new CountryHelper();
+    var countries = helper.GetCountryData();
+    var CountriesList = countries
+    .Select(c => new SelectListItem
+            {
+                Value = c.CountryShortCode,
+                Text = c.CountryName
+            }).ToList();
+
+
+}
 <h1 class="text-center">@ViewData["Title"]</h1>
 
 <div class="row justify-content-center">
@@ -81,7 +94,10 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input asp-for="Input.Country" class="form-control" placeholder="Country" />
+                        <select asp-for="Input.Country" asp-items="@(new SelectList(CountriesList, "Value", "Text"))"
+                                class="form-select">
+                            <option value="" disabled selected>-- Select a Country --</option>
+                        </select>
                         <label asp-for="Input.Country">Country</label>
                         <span asp-validation-for="Input.Country" class="text-danger"></span>
                     </div>
