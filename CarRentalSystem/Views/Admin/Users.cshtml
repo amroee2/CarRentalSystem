@@ -31,6 +31,10 @@
                     <a asp-controller="Cart" asp-action="Summary" asp-route-userId="@user.Id">
                         <button class="btn btn-warning btn-sm">View Carts</button>
                     </a>
+                    <form asp-action="TerminateSession" method="post">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <button type="submit" class="btn btn-danger">Terminate Session</button>
+                    </form>
                 </td>
             </tr>
         }

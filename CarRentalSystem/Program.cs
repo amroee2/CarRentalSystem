@@ -27,7 +27,7 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(1); 
+    options.IdleTimeout = TimeSpan.FromHours(2); 
     options.Cookie.HttpOnly = true; 
     options.Cookie.IsEssential = true; 
 });
@@ -37,10 +37,16 @@ builder.Services.AddMvc()
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true; 
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(1);
+    options.ExpireTimeSpan = TimeSpan.FromHours(2);
     options.LoginPath = "/Identity/Account/Login";
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
     options.SlidingExpiration = false;
+
+    options.Events.OnValidatePrincipal = SecurityStampValidator.ValidatePrincipalAsync;
+});
+builder.Services.Configure<SecurityStampValidatorOptions>(options =>
+{
+    options.ValidationInterval = TimeSpan.Zero;
 });
 
 async Task SeedAdminRoleAsync(IServiceProvider serviceProvider)
