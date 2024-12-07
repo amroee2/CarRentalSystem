@@ -26,13 +26,7 @@
                     <span class="badge bg-danger">Not Available</span>
                 }
             </p>
-            @if (Model.IsAvailable && !User.IsInRole("Admin"))
-            {
-                <div class="text-center">
-                    <a href="/rent/car/@Model.CarId" class="btn btn-primary btn-sm">Rent Now</a>
-                </div>
-            }
-            else if(User.IsInRole("Admin"))
+            @if(User.IsInRole("Admin"))
             {
                 <div class="text-center">
                     <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal-@Model.CarId">
