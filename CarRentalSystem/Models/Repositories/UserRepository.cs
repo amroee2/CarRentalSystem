@@ -16,5 +16,10 @@ namespace CarRentalSystem.Models.Repositories
         {
             return await _context.Users.ToListAsync();
         }
+
+        public async Task<User> GetUser(string userId)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        }
     }
 }

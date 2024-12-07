@@ -8,17 +8,14 @@ namespace CarRentalSystem.Controllers
     public class RentalController : Controller
     {
         private readonly IRentalRepository _rentalRepository;
-        private readonly UserManager<User> _userManager;
 
-        public RentalController(IRentalRepository rentalRepository, UserManager<User> userManager)
+        public RentalController(IRentalRepository rentalRepository)
         {
             _rentalRepository = rentalRepository;
-            _userManager = userManager;
         }
 
-        public IActionResult UserRentals()
+        public IActionResult UserRentals(string userId)
         {
-            var userId = _userManager.GetUserId(User);
             var rentals = _rentalRepository.GetUserRentals(userId);
             return View(rentals);
         }
