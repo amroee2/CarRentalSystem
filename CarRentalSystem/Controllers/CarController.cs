@@ -8,12 +8,10 @@ namespace CarRentalSystem.Controllers
     public class CarController : Controller
     {
         private readonly ICarRepository _carRepository;
-        private readonly ILogger<HomeController> _logger;
 
-        public CarController(ICarRepository carRepository, ILogger<HomeController> logger)
+        public CarController(ICarRepository carRepository)
         {
             _carRepository = carRepository;
-            _logger = logger;
         }
         public async Task<IActionResult> Details(int id)
         {
@@ -30,7 +28,8 @@ namespace CarRentalSystem.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(car);
+                TempData["ErrorMessage"] = "Problem with creating a car";
+                return RedirectToAction("Index", "Home");
             }
             car.IsAvailable = Request.Form["IsAvailable"] == "true";
             await _carRepository.AddCar(car);
@@ -41,6 +40,12 @@ namespace CarRentalSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(Car car)
         {
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Problem with updating a car";
+                return RedirectToAction("Index", "Home");
+            }
+            car.IsAvailable = Request.Form["IsAvailable"] == "true";
             await _carRepository.UpdateCar(car);
             return RedirectToAction("Index", "Home");
         }
