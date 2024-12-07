@@ -39,7 +39,7 @@ public class CartRepository : ICartRepository
         var cart = await GetOrCreateCartAsync(userId);
         if (cart.CartItems.Any(ci => ci.CarId == carId))
         {
-            ModifyExistingCarDateAsync(cart, carId, rentalStart, rentalEnd);
+            await ModifyExistingCarDateAsync(cart, carId, rentalStart, rentalEnd);
             return;
         }
         var car = await _context.Cars.FindAsync(carId);

@@ -28,7 +28,7 @@ namespace CarRentalSystem.Controllers
         public async Task<IActionResult> EmptyCart(string userId)
         {
             await _cartRepository.EmptyCartAsync(userId);
-            return RedirectToAction("Checkout", "Cart", userId);
+            return RedirectToAction("Checkout", "Cart", new { userId = userId });
         }
 
         [HttpPost]
@@ -37,7 +37,7 @@ namespace CarRentalSystem.Controllers
             try
             {
                 await _cartRepository.AddToCartAsync(userId, carId, start, end);
-                return RedirectToAction("Checkout", "Cart", userId);
+                return RedirectToAction("Checkout", "Cart", new { userId = userId });
             }
             catch (Exception ex)
             {
@@ -57,7 +57,7 @@ namespace CarRentalSystem.Controllers
         public async Task<IActionResult> RemoveFromCart(string userId, int carId)
         {
             await _cartRepository.RemoveFromCartAsync(userId, carId);
-            return RedirectToAction("Checkout", "Cart", userId);
+            return RedirectToAction("Checkout", "Cart", new { userId = userId });
         }
 
         public async Task<IActionResult> Summary(string userId)
