@@ -16,7 +16,7 @@ namespace CarRentalSystem.Controllers
         }
         public async Task<IActionResult> Details(int id)
         {
-            return View(await _carRepository.GetCar(id));
+            return View(await _carRepository.GetCarAsync(id));
         }
 
         public IActionResult Create()
@@ -33,10 +33,9 @@ namespace CarRentalSystem.Controllers
                 return RedirectToAction("Index", "Home");
             }
             car.IsAvailable = Request.Form["IsAvailable"] == "true";
-            await _carRepository.AddCar(car);
+            await _carRepository.AddCarAsync(car);
             return RedirectToAction("Index", "Home");
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Update(Car car)
@@ -47,15 +46,14 @@ namespace CarRentalSystem.Controllers
                 return RedirectToAction("Index", "Home");
             }
             car.IsAvailable = Request.Form["IsAvailable"] == "true";
-            await _carRepository.UpdateCar(car);
+            await _carRepository.UpdateCarAsync(car);
             return RedirectToAction("Index", "Home");
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            await _carRepository.DeleteCar(id);
+            await _carRepository.DeleteCarAsync(id);
             return RedirectToAction("Index", "Home");
         }
     }

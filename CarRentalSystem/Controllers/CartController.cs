@@ -18,25 +18,25 @@ namespace CarRentalSystem.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Checkout(string userId)
+        public async Task<IActionResult> Checkout(string userId)
         {
-            var cart = _cartRepository.GetOrCreateCart(userId);
+            var cart = await _cartRepository.GetOrCreateCartAsync(userId);
             return View(cart);
         }
 
         [HttpPost]
-        public IActionResult EmptyCart(string userId)
+        public async Task<IActionResult> EmptyCart(string userId)
         {
-            _cartRepository.EmptyCart(userId);
+            await _cartRepository.EmptyCartAsync(userId);
             return RedirectToAction("Checkout", "Cart", userId);
         }
 
         [HttpPost]
-        public IActionResult AddToCart(string userId, int carId,DateTime start, DateTime end)
+        public async Task<IActionResult> AddToCart(string userId, int carId,DateTime start, DateTime end)
         {
             try
             {
-                _cartRepository.AddToCart(userId, carId, start, end);
+                await _cartRepository.AddToCartAsync(userId, carId, start, end);
                 return RedirectToAction("Checkout", "Cart", userId);
             }
             catch (Exception ex)
@@ -47,22 +47,22 @@ namespace CarRentalSystem.Controllers
         }
 
         [HttpPost]
-        public IActionResult CheckoutCart(string userId)
+        public async Task<IActionResult> CheckoutCart(string userId)
         {
-            _cartRepository.Checkout(userId);
+            await _cartRepository.CheckoutAsync(userId);
             return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
-        public IActionResult RemoveFromCart(string userId, int carId)
+        public async Task<IActionResult> RemoveFromCart(string userId, int carId)
         {
-            _cartRepository.RemoveFromCart(userId, carId);
+            await _cartRepository.RemoveFromCartAsync(userId, carId);
             return RedirectToAction("Checkout", "Cart", userId);
         }
 
-        public IActionResult Summary(string userId)
+        public async Task<IActionResult> Summary(string userId)
         {
-            var carts = _cartRepository.GetAllProcessedCarts(userId);
+            var carts = await _cartRepository.GetAllProcessedCartsAsync(userId);
             return View(carts);
         }
     }

@@ -3,11 +3,11 @@
     public interface ICarRepository
     {
 
-        Task<List<Car>> GetAllCars();
-        Task<Car> GetCar(int id);
-        Task AddCar(Car car);
-        Task DeleteCar(int id);
-        Task UpdateCar(Car car);
-        List<Car> SearchCars(string searchText);
+        Task<List<Car>> GetAllCarsAsync();
+        Task<Car> GetCarAsync(int id);
+        Task AddCarAsync(Car car);
+        Task DeleteCarAsync(int id);
+        Task UpdateCarAsync(Car car);
+        List<Car> SearchCarsAsync(string searchText);
     }
 }

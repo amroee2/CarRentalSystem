@@ -12,12 +12,12 @@ public class CartRepository : ICartRepository
         _rentalRepository = rentalRepository;
     }
 
-    public Cart GetOrCreateCart(string userId)
+    public async Task<Cart> GetOrCreateCartAsync(string userId)
     {
-        var cart = _context.Carts
+        var cart = await _context.Carts
             .Include(c => c.CartItems)
             .ThenInclude(ci => ci.Car)
-            .FirstOrDefault(c => c.UserId == userId && !c.IsCheckedOut);
+            .FirstOrDefaultAsync(c => c.UserId == userId && !c.IsCheckedOut);
 
         if (cart == null)
         {
@@ -27,22 +27,22 @@ public class CartRepository : ICartRepository
                 IsCheckedOut = false,
                 TotalCost = 0
             };
-            _context.Carts.Add(cart);
-            _context.SaveChanges();
+            await _context.Carts.AddAsync(cart);
+            await _context.SaveChangesAsync();
         }
 
         return cart;
     }
 
-    public void AddToCart(string userId, int carId, DateTime rentalStart, DateTime rentalEnd)
+    public async Task AddToCartAsync(string userId, int carId, DateTime rentalStart, DateTime rentalEnd)
     {
-        var cart = GetOrCreateCart(userId);
+        var cart = await GetOrCreateCartAsync(userId);
         if (cart.CartItems.Any(ci => ci.CarId == carId))
         {
-            ModifyExistingCarDate(cart, carId, rentalStart, rentalEnd);
+            ModifyExistingCarDateAsync(cart, carId, rentalStart, rentalEnd);
             return;
         }
-        var car = _context.Cars.Find(carId);
+        var car = await _context.Cars.FindAsync(carId);
 
         try
         {
@@ -67,12 +67,12 @@ public class CartRepository : ICartRepository
 
         cart.CartItems.Add(cartItem);
         cart.TotalCost += rentalCost;
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
-    public void Checkout(string userId)
+    public async Task CheckoutAsync(string userId)
     {
-        var cart = GetOrCreateCart(userId);
+        var cart = await GetOrCreateCartAsync(userId);
 
         if (cart.CartItems.Count == 0)
             throw new InvalidOperationException("Cart is empty.");
@@ -88,54 +88,54 @@ public class CartRepository : ICartRepository
                 TotalCost = (double)item.Cost
             };
 
-            _context.Rentals.Add(rental);
+            await _context.Rentals.AddAsync(rental);
 
-            var car = _context.Cars.Find(item.CarId);
+            var car = await _context.Cars.FindAsync(item.CarId);
             if (car != null) car.IsAvailable = false;
         }
         cart.CheckedOutDate = DateTime.Now;
         cart.IsCheckedOut = true;
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
-    public void EmptyCart(string userId)
+    public async Task EmptyCartAsync(string userId)
     {
-        var cart = GetOrCreateCart(userId);
+        var cart = await GetOrCreateCartAsync(userId);
         cart.CartItems.Clear();
         cart.TotalCost = 0;
-        _context.SaveChanges();
+       await _context.SaveChangesAsync();
     }
 
-    public void RemoveFromCart(string userId, int carId)
+    public async Task RemoveFromCartAsync(string userId, int carId)
     {
-        var cart = GetOrCreateCart(userId);
+        var cart = await GetOrCreateCartAsync(userId);
         var cartItem = cart.CartItems.FirstOrDefault(ci => ci.CarId == carId);
         if (cartItem == null) return;
 
         cart.TotalCost -= cartItem.Cost;
         cart.CartItems.Remove(cartItem);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
-    public List<Cart> GetAllProcessedCarts(string userId)
+    public async Task<List<Cart>> GetAllProcessedCartsAsync(string userId)
     {
-        return _context.Carts
+        return await _context.Carts
             .Where(c => c.IsCheckedOut)
             .Include(c => c.CartItems)
             .ThenInclude(ci => ci.Car)
             .Where(c => c.UserId == userId)
-            .ToList();
+            .ToListAsync();
     }
 
-    public void ModifyExistingCarDate(Cart cart, int carId, DateTime rentalStart, DateTime rentalEnd)
+    public async Task ModifyExistingCarDateAsync(Cart cart, int carId, DateTime rentalStart, DateTime rentalEnd)
     {
-        var existingCartItem = _context.CartItems.FirstOrDefault(ci => ci.CarId == carId);
+        var existingCartItem = await _context.CartItems.FirstOrDefaultAsync(ci => ci.CarId == carId);
         cart.TotalCost -= existingCartItem.Cost;
         existingCartItem.RentalStart = rentalStart;
         existingCartItem.RentalEnd = rentalEnd;
         existingCartItem.Cost = (rentalEnd - rentalStart).Days * existingCartItem.Car.RentPricePerDay;
         cart.TotalCost += existingCartItem.Cost;
-        _context.SaveChanges();
+       await _context.SaveChangesAsync();
     }
 
     public void ValidateAddition(Cart cart, Car car, DateTime rentalEnd, DateTime rentalStart, string userId)
@@ -159,7 +159,7 @@ public class CartRepository : ICartRepository
             }
         }
 
-        var rentedCars = _rentalRepository.GetActiveUserRentals(userId);
+        var rentedCars = _rentalRepository.GetActiveUserRentalsAsync(userId);
 
         foreach (var rental in rentedCars)
         {

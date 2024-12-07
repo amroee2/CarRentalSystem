@@ -2,7 +2,7 @@
 {
     public interface IRentalRepository
     {
-        List<Rental> GetUserRentals(string userId);
-        List<Rental> GetActiveUserRentals(string userId);
+        Task<List<Rental>> GetUserRentalsAsync(string userId);
+        Task<List<Rental>> GetActiveUserRentalsAsync(string userId);
     }
 }

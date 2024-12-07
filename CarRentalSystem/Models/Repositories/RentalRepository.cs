@@ -10,20 +10,20 @@ namespace CarRentalSystem.Models.Repositories
             _context = context;
         }
 
-        public List<Rental> GetUserRentals(string userId)
+        public async Task<List<Rental>> GetUserRentalsAsync(string userId)
         {
-            return _context.Rentals
+            return await _context.Rentals
                 .Where(r => r.UserId == userId)
                 .Include(r => r.Car)
-                .ToList();
+                .ToListAsync();
         }
 
-        public List<Rental> GetActiveUserRentals(string userId)
+        public async Task<List<Rental>> GetActiveUserRentalsAsync(string userId)
         {
-            return _context.Rentals
+            return await _context.Rentals
                 .Where(r => r.UserId == userId && r.RentalEndDate > DateTime.Now)
                 .Include(r => r.Car)
-                .ToList();
+                .ToListAsync();
         }
     }
 }

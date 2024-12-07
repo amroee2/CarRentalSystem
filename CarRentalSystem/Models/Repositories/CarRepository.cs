@@ -12,38 +12,38 @@ namespace CarRentalSystem.Models.Repositories
             _context = context;
         }
 
-        public async Task <List<Car>> GetAllCars()
+        public async Task <List<Car>> GetAllCarsAsync()
         {
             return await _context.Cars.AsNoTracking().ToListAsync();
         }
 
-        public async Task<Car> GetCar(int id)
+        public async Task<Car> GetCarAsync(int id)
         {
             return await _context.Cars.AsNoTracking().FirstOrDefaultAsync(c => c.CarId == id);
         }
 
-        public async Task AddCar(Car car)
+        public async Task AddCarAsync(Car car)
         {
-            _context.Cars.Add(car);
+            await _context.Cars.AddAsync(car);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateCar(Car car)
+        public async Task UpdateCarAsync(Car car)
         {
             _context.Update(car);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteCar(int id)
+        public async Task DeleteCarAsync(int id)
         {
             var car = await _context.Cars.FirstOrDefaultAsync(c => c.CarId == id);
             _context.Cars.Remove(car);
             await _context.SaveChangesAsync();
         }
 
-        public List<Car> SearchCars(string searchText)
+        public List<Car> SearchCarsAsync(string searchText)
         {
-            return _context.Cars.Where(c => c.CarName.Contains(searchText) || c.CarModel.Contains(searchText)).ToList();
+            return _context.Cars.AsNoTracking().Where(c => c.CarName.Contains(searchText) || c.CarModel.Contains(searchText)).ToList();
         }
     }
 }

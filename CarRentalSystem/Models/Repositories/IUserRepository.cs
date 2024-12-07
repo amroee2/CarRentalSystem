@@ -3,6 +3,6 @@
     public interface IUserRepository
     {
         Task<List<User>> GetUsersAsync();
-        Task<User> GetUser(string userId);
+        Task<User> GetUserAsync(string userId);
     }
 }

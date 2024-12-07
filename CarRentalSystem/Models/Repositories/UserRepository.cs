@@ -17,7 +17,7 @@ namespace CarRentalSystem.Models.Repositories
             return await _context.Users.ToListAsync();
         }
 
-        public async Task<User> GetUser(string userId)
+        public async Task<User> GetUserAsync(string userId)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
         }

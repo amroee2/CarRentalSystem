@@ -16,9 +16,9 @@ namespace CarRentalSystem.Controllers
             _rentalRepository = rentalRepository;
         }
 
-        public IActionResult UserRentals(string userId)
+        public async Task<IActionResult> UserRentals(string userId)
         {
-            var rentals = _rentalRepository.GetUserRentals(userId);
+            var rentals = await _rentalRepository.GetUserRentalsAsync(userId);
             return View(rentals);
         }
     }

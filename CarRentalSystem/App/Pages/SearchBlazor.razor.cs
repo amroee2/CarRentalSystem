@@ -19,7 +19,7 @@ namespace CarRentalSystem.App.Pages
             if (CarRepository is not null)
             {
                 if (SearchText.Length >= 3)
-                    FilteredCars = CarRepository.SearchCars(SearchText).ToList();
+                    FilteredCars = CarRepository.SearchCarsAsync(SearchText).ToList();
             }
         }
     }

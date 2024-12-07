@@ -21,13 +21,8 @@ namespace CarRentalSystem.Controllers
 
         public async Task<IActionResult> Index()
         {
-            CarListViewModel carListViewModel = new CarListViewModel(await _carRepository.GetAllCars());
+            CarListViewModel carListViewModel = new CarListViewModel(await _carRepository.GetAllCarsAsync());
             return View(carListViewModel);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

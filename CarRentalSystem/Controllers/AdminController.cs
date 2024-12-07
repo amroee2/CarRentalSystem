@@ -27,7 +27,7 @@ namespace CarRentalSystem.Controllers
 
         public async Task<IActionResult> Details(string userId)
         {
-            var user = await _userRepository.GetUser(userId);
+            var user = await _userRepository.GetUserAsync(userId);
             return View(user);
         }
 
