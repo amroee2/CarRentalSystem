@@ -62,9 +62,8 @@ namespace CarRentalSystem.Controllers
             return RedirectToAction("Checkout");
         }
 
-        public IActionResult Summary()
+        public IActionResult Summary(string userId)
         {
-            var userId = _userManager.GetUserId(User);
             var carts = _cartRepository.GetAllProcessedCarts(userId);
             return View(carts);
         }

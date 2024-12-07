@@ -1,5 +1,4 @@
 ﻿@model List<User>
-
 @{
     ViewData["Title"] = "Users";
 }
@@ -23,9 +22,11 @@
                 <td>@user.FirstName</td>
                 <td>@user.LastName</td>
                 <td>
-                    <button class="btn btn-info btn-sm" onclick="viewMoreInfo('@user.Id')">View More Info</button>
-                    <button class="btn btn-success btn-sm" onclick="viewRentals('@user.Id')">View Rentals</button>
-                    <button class="btn btn-warning btn-sm" onclick="viewCarts('@user.Id')">View Carts</button>
+                    <button class="btn btn-info btn-sm" >View More Info</button>
+                    <button class="btn btn-success btn-sm">View Rentals</button>
+                    <a asp-controller="Cart" asp-action="Summary" asp-route-userId="@user.Id">
+                        <button class="btn btn-warning btn-sm">View Carts</button>
+                    </a>
                 </td>
             </tr>
         }

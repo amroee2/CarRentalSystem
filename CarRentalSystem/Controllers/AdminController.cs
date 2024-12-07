@@ -18,5 +18,10 @@ namespace CarRentalSystem.Controllers
             var users = await _userRepository.GetUsersAsync();
             return View(users);
         }
+
+        public async Task<IActionResult> UserRentals()
+        {
+            return View("UserRentals"); 
+        }
     }
 }
