@@ -16,9 +16,8 @@ namespace CarRentalSystem.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Checkout()
+        public IActionResult Checkout(string userId)
         {
-            var userId = _userManager.GetUserId(User);
             var cart = _cartRepository.GetOrCreateCart(userId);
             return View(cart);
         }
@@ -27,7 +26,7 @@ namespace CarRentalSystem.Controllers
         public IActionResult EmptyCart(string userId)
         {
             _cartRepository.EmptyCart(userId);
-            return RedirectToAction("Checkout");
+            return RedirectToAction("Checkout", "Cart", userId);
         }
 
         [HttpPost]
@@ -36,7 +35,7 @@ namespace CarRentalSystem.Controllers
             try
             {
                 _cartRepository.AddToCart(userId, carId, start, end);
-                return RedirectToAction("Checkout");
+                return RedirectToAction("Checkout", "Cart", userId);
             }
             catch (Exception ex)
             {
@@ -56,7 +55,7 @@ namespace CarRentalSystem.Controllers
         public IActionResult RemoveFromCart(string userId, int carId)
         {
             _cartRepository.RemoveFromCart(userId, carId);
-            return RedirectToAction("Checkout");
+            return RedirectToAction("Checkout", "Cart", userId);
         }
 
         public IActionResult Summary(string userId)

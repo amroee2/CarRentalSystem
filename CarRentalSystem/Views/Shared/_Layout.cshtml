@@ -54,7 +54,7 @@
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark d-flex align-items-center" asp-controller="Cart" asp-action="Checkout">
+                                <a class="nav-link text-dark d-flex align-items-center" asp-controller="Cart" asp-action="Checkout" asp-route-userId="@UserManager.GetUserId(User)">
                                     <i class="fas fa-shopping-cart me-2"></i> Cart
                                 </a>
                             </li>
