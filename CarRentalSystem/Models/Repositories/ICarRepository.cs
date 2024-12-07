@@ -8,5 +8,6 @@
         Task AddCar(Car car);
         Task DeleteCar(int id);
         Task UpdateCar(Car car);
+        List<Car> SearchCars(string searchText);
     }
 }

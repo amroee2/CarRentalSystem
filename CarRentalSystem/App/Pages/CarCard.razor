@@ -1,0 +1,24 @@
+﻿<div class="card shadow-sm" style="width: 18rem;">
+    <img src="@Car?.CarImage" class="card-img-top" alt="@Car?.CarName" style="height: 200px; object-fit: cover;">
+    <div class="card-body">
+        <a href="/Car/Details/@Car?.CarId" class="text-blue-500">
+            <h5 class="card-title">@Car?.CarName</h5>
+        </a>
+        <p class="card-text">
+            <strong>Model:</strong> @Car?.CarModel <br />
+            <strong>Price/Day:</strong> $@Car?.RentPricePerDay <br />
+            <strong>Description:</strong> @Car?.CarDescription
+        </p>
+        <p>
+            <strong>Availability:</strong>
+            @if (Car.IsAvailable)
+            {
+                <span class="badge bg-success">Available</span>
+            }
+            else
+            {
+                <span class="badge bg-danger">Not Available</span>
+            }
+        </p>
+    </div>
+</div>

@@ -40,5 +40,10 @@ namespace CarRentalSystem.Models.Repositories
             _context.Cars.Remove(car);
             await _context.SaveChangesAsync();
         }
+
+        public List<Car> SearchCars(string searchText)
+        {
+            return _context.Cars.Where(c => c.CarName.Contains(searchText) || c.CarModel.Contains(searchText)).ToList();
+        }
     }
 }

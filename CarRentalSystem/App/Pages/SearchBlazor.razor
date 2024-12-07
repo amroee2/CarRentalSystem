@@ -1,0 +1,29 @@
+﻿@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@page "/searchblazor"
+@rendermode InteractiveServer
+
+<h3>Search Cars</h3>
+
+
+<div class="text-center bg-blue-100">
+    <input class="border-4 w-1/3 rounded m-6 p-6 h-8
+               border-blue-300" @bind-value="SearchText"
+           @bind-value:event="oninput" placeholder="Search by car name" @onkeyup="Search" />
+</div>
+
+@if (!FilteredCars.Any())
+{
+    <p>Nothing to show</p>
+}
+else
+{
+    <div class="d-flex flex-wrap gap-3 justify-content-start p-2">
+        @foreach (var Car in FilteredCars)
+        {
+            <CarCard Car=@Car></CarCard>
+        }
+    </div>
+}
+
+
