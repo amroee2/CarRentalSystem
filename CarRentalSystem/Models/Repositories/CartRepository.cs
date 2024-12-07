@@ -46,7 +46,7 @@ public class CartRepository : ICartRepository
 
         try
         {
-            ValidateAddition(cart, car, rentalEnd, rentalStart, userId);
+            await ValidateAdditionAsync(cart, car, rentalEnd, rentalStart, userId);
         }
         catch (InvalidOperationException ex)
         {
@@ -138,7 +138,7 @@ public class CartRepository : ICartRepository
        await _context.SaveChangesAsync();
     }
 
-    public void ValidateAddition(Cart cart, Car car, DateTime rentalEnd, DateTime rentalStart, string userId)
+    public async Task ValidateAdditionAsync(Cart cart, Car car, DateTime rentalEnd, DateTime rentalStart, string userId)
     {
         if (car == null || !car.IsAvailable)
             throw new InvalidOperationException("Car not available.");
@@ -159,7 +159,7 @@ public class CartRepository : ICartRepository
             }
         }
 
-        var rentedCars = _rentalRepository.GetActiveUserRentalsAsync(userId);
+        var rentedCars = await _rentalRepository.GetActiveUserRentalsAsync(userId);
 
         foreach (var rental in rentedCars)
         {
