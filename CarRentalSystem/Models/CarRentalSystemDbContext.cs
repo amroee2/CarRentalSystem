@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CarRentalSystem.Models
 {
-    public class CarRentalSystemDbContext : IdentityDbContext
+    public class CarRentalSystemDbContext : IdentityDbContext<User>
     {
         public CarRentalSystemDbContext(DbContextOptions<CarRentalSystemDbContext> options) : base(options)
         {
