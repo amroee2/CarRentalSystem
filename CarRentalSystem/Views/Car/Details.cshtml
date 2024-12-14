@@ -1,0 +1,79 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model CarRentalSystem.Models.Car
+@inject UserManager<User> UserManager
+@{
+    ViewData["Title"] = "Car Details";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="row g-0">
+            <!-- Car Image -->
+            <div class="col-md-5">
+                <img src="@Model.CarImage" class="img-fluid rounded-start" alt="@Model.CarName" style="height: 100%; object-fit: cover;">
+            </div>
+
+            <div class="col-md-7">
+                <div class="card-body">
+                    <h2 class="card-title display-5">@Model.CarName</h2>
+                    <p class="card-text fs-4">
+                        <strong>Model:</strong> @Model.CarModel <br />
+                        <strong>Price/Day:</strong> $@Model.RentPricePerDay <br />
+                        <strong>Description:</strong> @Model.CarDescription
+                    </p>
+                    <p class="card-text fs-5">
+                        <strong>Availability:</strong>
+                        @if (Model.IsAvailable)
+                        {
+                            <span class="badge bg-success fs-6">Available</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger fs-6">Not Available</span>
+                        }
+                    </p>
+                    @if (Model.IsAvailable)
+                    {
+                        <div class="mt-4">
+                            <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#rentCarModal">
+                                Rent Now
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="rentCarModal" tabindex="-1" aria-labelledby="rentCarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="rentCarModalLabel">Rent Car</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="carId" value="@Model.CarId" />
+                    <input type="hidden" name="userId" value="@UserManager.GetUserId(User)" />
+                    <div class="mb-3">
+                        <label for="startDate" class="form-label">Start Date</label>
+                        <input type="date" id="startDate" name="start" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="endDate" class="form-label">End Date</label>
+                        <input type="date" id="endDate" name="end" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Rent Now</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

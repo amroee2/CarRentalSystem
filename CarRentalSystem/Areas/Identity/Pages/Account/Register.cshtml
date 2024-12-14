@@ -1,0 +1,120 @@
+﻿@page
+@using CountryData.Standard
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model RegisterModel
+
+@{
+    ViewData["Title"] = "Register";
+
+    var helper = new CountryHelper();
+    var countries = helper.GetCountryData();
+    var CountriesList = countries
+    .Select(c => new SelectListItem
+            {
+                Value = c.CountryShortCode,
+                Text = c.CountryName
+            }).ToList();
+
+
+}
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="p-4 border rounded shadow-sm bg-light">
+            <h2 class="text-center">Create a New Account</h2>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input asp-for="Input.FirstName" class="form-control" placeholder="First Name" />
+                        <label asp-for="Input.FirstName">First Name</label>
+                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input asp-for="Input.LastName" class="form-control" placeholder="Last Name" />
+                        <label asp-for="Input.LastName">Last Name</label>
+                        <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-floating my-3">
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="name@example.com" />
+                <label asp-for="Input.Email">Email</label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input asp-for="Input.Password" class="form-control" autocomplete="new-password" placeholder="Password" />
+                        <label asp-for="Input.Password">Password</label>
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" placeholder="Confirm Password" />
+                        <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-floating my-3">
+                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Phone Number" />
+                <label asp-for="Input.PhoneNumber">Phone Number</label>
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating my-3">
+                <input asp-for="Input.PrimaryAddress" class="form-control" placeholder="Primary Address" />
+                <label asp-for="Input.PrimaryAddress">Primary Address</label>
+                <span asp-validation-for="Input.PrimaryAddress" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating my-3">
+                <input asp-for="Input.SecondaryAddress" class="form-control" placeholder="Secondary Address" />
+                <label asp-for="Input.SecondaryAddress">Secondary Address</label>
+                <span asp-validation-for="Input.SecondaryAddress" class="text-danger"></span>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input asp-for="Input.City" class="form-control" placeholder="City" />
+                        <label asp-for="Input.City">City</label>
+                        <span asp-validation-for="Input.City" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select asp-for="Input.Country" asp-items="@(new SelectList(CountriesList, "Value", "Text"))"
+                                class="form-select">
+                            <option value="" disabled selected>-- Select a Country --</option>
+                        </select>
+                        <label asp-for="Input.Country">Country</label>
+                        <span asp-validation-for="Input.Country" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-floating my-3">
+                <input asp-for="Input.DriversLicenseNumber" class="form-control" placeholder="Driver's License Number" />
+                <label asp-for="Input.DriversLicenseNumber">Driver's License Number</label>
+                <span asp-validation-for="Input.DriversLicenseNumber" class="text-danger"></span>
+            </div>
+
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary mt-4">Register</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

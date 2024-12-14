@@ -1,0 +1,70 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model CarRentalSystem.Models.Cart
+@inject UserManager<User> UserManager
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<h1>Checkout</h1>
+
+@if (Model.CartItems.Count == 0)
+{
+    <p>Your cart is empty. <a href="/">Browse cars</a>.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Car</th>
+                <th>Rental Period</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CartItems)
+            {
+                <tr>
+                    <td>
+                        <img src="@item.Car.CarImage" alt="@item.Car.CarName" style="width: 100px;" />
+                        <div>
+                            <strong>@item.Car.CarName</strong><br />
+                            <span>@item.Car.CarModel</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span>@item.RentalStart.ToString("MMM dd, yyyy")</span> -
+                        <span>@item.RentalEnd.ToString("MMM dd, yyyy")</span>
+                    </td>
+                    <td>
+                        $@item.Cost.ToString("F2")
+                    </td>
+                    <td>
+                        <form asp-controller="Cart" asp-action="RemoveFromCart" method="post" style="display:inline;">
+                            <input type="hidden" name="userId" value="@UserManager.GetUserId(User)" />
+                            <input type="hidden" name="carId" value="@item.Car.CarId" />
+                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-right"><strong>Total Cost:</strong></td>
+                <td><strong>$@Model.TotalCost.ToString("F2")</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <form asp-controller="Cart" asp-action="EmptyCart" method="post" style="display:inline;">
+        <input type="hidden" name="userId" value="@UserManager.GetUserId(User)" />
+        <button type="submit" class="btn btn-warning btn-sm">Empty Cart</button>
+    </form>
+
+    <form asp-controller="Cart" asp-action="CheckoutCart" method="post">
+        <input type="hidden" name="userId" value="@UserManager.GetUserId(User)" />
+        <button type="submit" class="btn btn-primary">Confirm</button>
+    </form>
+}
